@@ -37,8 +37,9 @@ The tool reads every supported agent CLI it finds on your machine and folds them
 | [![pi](https://img.shields.io/badge/pi-555?logo=pi&logoColor=white)](https://pi.dev) | `~/.pi/agent/sessions` | `--no-pi` | structural |
 | [![cursor-agent](https://img.shields.io/badge/cursor--agent-555?logo=cursor&logoColor=white)](https://cursor.com/cli) | `~/.cursor/chats` (sqlite; needs Node 22.5+, otherwise read as empty and disclosed) | `--no-cursor` | structural |
 | ![kimi-code](https://img.shields.io/badge/kimi--code-555?logo=moonshotai&logoColor=white) | `~/.kimi-code/sessions` | `--no-kimi` | structural |
+| Kiro CLI + IDE | `${KIRO_HOME}/sessions` or `~/.kiro/sessions` | `--no-kiro` | structural |
 
-Every source normalizes into the same session model, so all six lenses below read them identically. Each `--<source>-root <dir>` flag overrides the default location. What never gets opened per source (credential files, config, telemetry) is enumerated in [PRIVACY.md](PRIVACY.md). Gemini CLI and ChatGPT / Claude.ai exports are on the roadmap.
+Every source normalizes into the same session model, so all six lenses below read them identically. Each `--<source>-root <dir>` flag overrides the default location. Kiro uses `${KIRO_HOME}/sessions` when `KIRO_HOME` is set and otherwise `~/.kiro/sessions`; `--kiro-root <dir>` overrides either default. What never gets opened per source (credential files, config, telemetry) is enumerated in [PRIVACY.md](PRIVACY.md). Gemini CLI and ChatGPT / Claude.ai exports are on the roadmap.
 
 ## What we look at
 
