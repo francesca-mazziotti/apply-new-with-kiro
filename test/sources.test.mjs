@@ -113,6 +113,13 @@ test("summarizeSources: a kimi session reports structural capture in its own gro
   assert.equal(claudeEntry.captureLevel, "full", "claude-code must stay full capture, not get pulled down by kimi");
 });
 
+test("summarizeSources: a kiro session reports structural capture", () => {
+  const s = summarizeSources({ sessions: [factorySess("kiro", "app")] });
+  assert.equal(s[0].source, "kiro");
+  assert.equal(s[0].captureLevel, "structural");
+  assert.equal(s[0].sessions, 1);
+});
+
 const assembleArgs = (extra = {}) => ({
   contact: { name: "X", email: "x@y.z", city: "C", status: "freelance" },
   projects: [{ repo: "app", selected: true, type: ["feature-work"], from: "2026-05", to: "2026-05", sessions: 3, userMessages: 9, tech: [], landing: {}, researchToMutation: null, delegation: 0, topAreas: {} }],

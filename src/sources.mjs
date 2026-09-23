@@ -11,6 +11,7 @@
 //                  bundle with stats.backend: null on Node < 22.5 — no
 //                  node:sqlite — so it just contributes zero sessions there)
 //   - kimi:        ~/.kimi-code/sessions, opt-out
+//   - kiro:        KIRO_HOME/sessions or ~/.kiro/sessions, opt-out
 //
 // Both opencode backends (sqlite and JSON) live in src/adapters/opencode.mjs;
 // this file just decides *whether* to read each source at all and *which*
@@ -23,6 +24,7 @@ import { readCodex, defaultCodexRoot } from "./adapters/codex.mjs";
 import { readPi, defaultPiRoot } from "./adapters/pi.mjs";
 import { readCursor, defaultCursorRoot } from "./adapters/cursor.mjs";
 import { readKimi, defaultKimiRoot } from "./adapters/kimi.mjs";
+import { readKiro, defaultKiroRoot } from "./adapters/kiro.mjs";
 
 export function readAllSources({ claudeRoot, sources }) {
   const bundles = [readClaudeCode(claudeRoot)];
@@ -62,6 +64,13 @@ export function readAllSources({ claudeRoot, sources }) {
   if (!k.disabled) {
     const root = k.root ?? defaultKimiRoot();
     const parsed = readKimi(root);
+    if (parsed.sessions.length) bundles.push(parsed);
+  }
+
+  const kr = sources?.kiro ?? {};
+  if (!kr.disabled) {
+    const root = kr.root ?? defaultKiroRoot();
+    const parsed = readKiro(root);
     if (parsed.sessions.length) bundles.push(parsed);
   }
 
