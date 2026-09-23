@@ -111,7 +111,7 @@ npm test
 
 PRs and issues are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) for the rules
 that make this repo unusual (schema discipline, privacy boundaries, the
-[ADR-001](docs/adr/001-just-a-report.md) frame, the current six-source policy).
+[ADR-001](docs/adr/001-just-a-report.md) frame, the current log-source policy).
 Security issues go privately via [SECURITY.md](SECURITY.md), never as public issues.
 
 ## License
