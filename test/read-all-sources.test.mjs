@@ -193,7 +193,7 @@ test("--no-opencode produces a claude-code-only bundle (privacy escape hatch)", 
       claudeRoot,
       // codex explicitly disabled so this doesn't pick up whatever real
       // codex data happens to exist on the machine running the suite.
-      sources: { opencode: { root: ocRoot, disabled: true, json: false }, codex: { disabled: true }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { disabled: true } },
+      sources: { opencode: { root: ocRoot, disabled: true, json: false }, codex: { disabled: true }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { disabled: true }, kiro: { disabled: true } },
     });
     // The opencode storage tree on disk has 1 session; with --no-opencode it
     // must NOT appear in the bundle.
@@ -210,7 +210,7 @@ test("without --no-opencode, opencode sessions are included in the bundle", () =
   try {
     const parsed = readAllSources({
       claudeRoot,
-      sources: { opencode: { root: ocRoot, disabled: false, json: false }, codex: { disabled: true }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { disabled: true } },
+      sources: { opencode: { root: ocRoot, disabled: false, json: false }, codex: { disabled: true }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { disabled: true }, kiro: { disabled: true } },
     });
     assert.equal(parsed.sessions.length, 1, `expected 1 session, got ${parsed.sessions.length}`);
     assert.equal(parsed.sessions[0].sessionId, "ses_one");
@@ -229,7 +229,7 @@ test("--no-opencode=true takes precedence over a present opencode root", () => {
   try {
     const parsed = readAllSources({
       claudeRoot,
-      sources: { opencode: { root: ocRoot, disabled: true, json: false }, codex: { disabled: true }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { disabled: true } },
+      sources: { opencode: { root: ocRoot, disabled: true, json: false }, codex: { disabled: true }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { disabled: true }, kiro: { disabled: true } },
     });
     for (const s of parsed.sessions) {
       assert.notEqual(s.source, "opencode", `opencode session leaked despite noOpencode=true: ${s.sessionId}`);
@@ -260,7 +260,7 @@ test("sources.opencode.root: null falls back to defaultOpencodeRoot() (not silen
     const parsed = readAllSources({
       claudeRoot,
       // root: null <-- this is what the bin actually passes when --opencode-root is absent
-      sources: { opencode: { root: null, disabled: false, json: false }, codex: { disabled: true }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { disabled: true } },
+      sources: { opencode: { root: null, disabled: false, json: false }, codex: { disabled: true }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { disabled: true }, kiro: { disabled: true } },
     });
     assert.equal(parsed.sessions.length, 1, `expected root:null to fall back to defaultOpencodeRoot() and find the on-disk storage; got ${parsed.sessions.length} sessions`);
     assert.equal(parsed.sessions[0].source, "opencode");
@@ -280,7 +280,7 @@ test("without --no-codex, codex sessions are included in the bundle", () => {
       claudeRoot,
       // opencode explicitly disabled so this doesn't pick up whatever real
       // opencode data happens to exist on the machine running the suite.
-      sources: { opencode: { disabled: true }, codex: { root: cxRoot, disabled: false }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { disabled: true } },
+      sources: { opencode: { disabled: true }, codex: { root: cxRoot, disabled: false }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { disabled: true }, kiro: { disabled: true } },
     });
     assert.equal(parsed.sessions.length, 1, `expected 1 session, got ${parsed.sessions.length}`);
     assert.equal(parsed.sessions[0].sessionId, "cx-one");
@@ -297,7 +297,7 @@ test("--no-codex produces a claude-code-only bundle (privacy escape hatch)", () 
   try {
     const parsed = readAllSources({
       claudeRoot,
-      sources: { opencode: { disabled: true }, codex: { root: cxRoot, disabled: true }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { disabled: true } },
+      sources: { opencode: { disabled: true }, codex: { root: cxRoot, disabled: true }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { disabled: true }, kiro: { disabled: true } },
     });
     // The codex sessions tree on disk has 1 session; with --no-codex it must
     // NOT appear in the bundle.
@@ -318,10 +318,10 @@ test("absent codex source key or an empty codex root leaves the claude-code-only
   const prevHome = process.env.CODEX_HOME;
   process.env.CODEX_HOME = mkdtempSync(join(tmpdir(), "cx-home-"));
   try {
-    const noCodexKey = readAllSources({ claudeRoot, sources: { opencode: { disabled: true }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { disabled: true } } }); // no sources.codex at all
+    const noCodexKey = readAllSources({ claudeRoot, sources: { opencode: { disabled: true }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { disabled: true }, kiro: { disabled: true } } }); // no sources.codex at all
     const withEmptyRoot = readAllSources({
       claudeRoot,
-      sources: { opencode: { disabled: true }, codex: { root: emptyCodexRoot, disabled: false }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { disabled: true } },
+      sources: { opencode: { disabled: true }, codex: { root: emptyCodexRoot, disabled: false }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { disabled: true }, kiro: { disabled: true } },
     });
     assert.equal(noCodexKey.source, "claude-code");
     assert.equal(noCodexKey.sessions.length, 0);
@@ -343,7 +343,7 @@ test("without --no-pi, pi sessions are included in the bundle", () => {
       claudeRoot,
       // opencode and codex explicitly disabled so this doesn't pick up
       // whatever real opencode/codex data happens to exist on the machine.
-      sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { root: piRoot, disabled: false }, cursor: { disabled: true }, kimi: { disabled: true } },
+      sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { root: piRoot, disabled: false }, cursor: { disabled: true }, kimi: { disabled: true }, kiro: { disabled: true } },
     });
     assert.equal(parsed.sessions.length, 1, `expected 1 session, got ${parsed.sessions.length}`);
     assert.equal(parsed.sessions[0].sessionId, "pi-one");
@@ -360,7 +360,7 @@ test("--no-pi produces a claude-code-only bundle (privacy escape hatch)", () => 
   try {
     const parsed = readAllSources({
       claudeRoot,
-      sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { root: piRoot, disabled: true }, cursor: { disabled: true }, kimi: { disabled: true } },
+      sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { root: piRoot, disabled: true }, cursor: { disabled: true }, kimi: { disabled: true }, kiro: { disabled: true } },
     });
     // The pi sessions tree on disk has 1 session; with --no-pi it must NOT
     // appear in the bundle.
@@ -388,10 +388,10 @@ test("absent pi source key or an empty pi root leaves the claude-code-only bundl
   process.env.HOME = fakeHome;
   process.env.USERPROFILE = fakeHome;
   try {
-    const noPiKey = readAllSources({ claudeRoot, sources: { opencode: { disabled: true }, codex: { disabled: true }, cursor: { disabled: true }, kimi: { disabled: true } } }); // no sources.pi at all
+    const noPiKey = readAllSources({ claudeRoot, sources: { opencode: { disabled: true }, codex: { disabled: true }, cursor: { disabled: true }, kimi: { disabled: true }, kiro: { disabled: true } } }); // no sources.pi at all
     const withEmptyRoot = readAllSources({
       claudeRoot,
-      sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { root: emptyPiRoot, disabled: false }, cursor: { disabled: true }, kimi: { disabled: true } },
+      sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { root: emptyPiRoot, disabled: false }, cursor: { disabled: true }, kimi: { disabled: true }, kiro: { disabled: true } },
     });
     assert.equal(noPiKey.source, "claude-code");
     assert.equal(noPiKey.sessions.length, 0);
@@ -420,7 +420,7 @@ test("without --no-cursor, cursor sessions are included in the bundle", { skip: 
       claudeRoot,
       // opencode/codex/pi explicitly disabled so this doesn't pick up
       // whatever real opencode/codex/pi data happens to exist on the machine.
-      sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { disabled: true }, cursor: { root: cuRoot, disabled: false }, kimi: { disabled: true } },
+      sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { disabled: true }, cursor: { root: cuRoot, disabled: false }, kimi: { disabled: true }, kiro: { disabled: true } },
     });
     assert.equal(parsed.sessions.length, 1, `expected 1 session, got ${parsed.sessions.length}`);
     assert.equal(parsed.sessions[0].sessionId, "cu-one");
@@ -437,7 +437,7 @@ test("--no-cursor produces a claude-code-only bundle (privacy escape hatch)", { 
   try {
     const parsed = readAllSources({
       claudeRoot,
-      sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { disabled: true }, cursor: { root: cuRoot, disabled: true }, kimi: { disabled: true } },
+      sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { disabled: true }, cursor: { root: cuRoot, disabled: true }, kimi: { disabled: true }, kiro: { disabled: true } },
     });
     // The cursor chats tree on disk has 1 session; with --no-cursor it must
     // NOT appear in the bundle.
@@ -463,10 +463,10 @@ test("absent cursor source key or an empty cursor root leaves the claude-code-on
   process.env.HOME = fakeHome;
   process.env.USERPROFILE = fakeHome;
   try {
-    const noCursorKey = readAllSources({ claudeRoot, sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { disabled: true }, kimi: { disabled: true } } }); // no sources.cursor at all
+    const noCursorKey = readAllSources({ claudeRoot, sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { disabled: true }, kimi: { disabled: true }, kiro: { disabled: true } } }); // no sources.cursor at all
     const withEmptyRoot = readAllSources({
       claudeRoot,
-      sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { disabled: true }, cursor: { root: emptyCursorRoot, disabled: false }, kimi: { disabled: true } },
+      sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { disabled: true }, cursor: { root: emptyCursorRoot, disabled: false }, kimi: { disabled: true }, kiro: { disabled: true } },
     });
     assert.equal(noCursorKey.source, "claude-code");
     assert.equal(noCursorKey.sessions.length, 0);
@@ -495,7 +495,7 @@ test("without --no-kimi, kimi sessions are included in the bundle", () => {
       // opencode/codex/pi/cursor explicitly disabled so this doesn't pick up
       // whatever real opencode/codex/pi/cursor data happens to exist on the
       // machine.
-      sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { root: kiRoot, disabled: false } },
+      sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { root: kiRoot, disabled: false }, kiro: { disabled: true } },
     });
     assert.equal(parsed.sessions.length, 1, `expected 1 session, got ${parsed.sessions.length}`);
     assert.equal(parsed.sessions[0].sessionId, "ki-one");
@@ -512,7 +512,7 @@ test("--no-kimi produces a claude-code-only bundle (privacy escape hatch)", () =
   try {
     const parsed = readAllSources({
       claudeRoot,
-      sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { root: kiRoot, disabled: true } },
+      sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { root: kiRoot, disabled: true }, kiro: { disabled: true } },
     });
     // The kimi sessions tree on disk has 1 session; with --no-kimi it must
     // NOT appear in the bundle.
@@ -539,10 +539,10 @@ test("absent kimi source key or an empty kimi root leaves the claude-code-only b
   process.env.HOME = fakeHome;
   process.env.USERPROFILE = fakeHome;
   try {
-    const noKimiKey = readAllSources({ claudeRoot, sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { disabled: true }, cursor: { disabled: true } } }); // no sources.kimi at all
+    const noKimiKey = readAllSources({ claudeRoot, sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { disabled: true }, cursor: { disabled: true }, kiro: { disabled: true } } }); // no sources.kimi at all
     const withEmptyRoot = readAllSources({
       claudeRoot,
-      sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { root: emptyKimiRoot, disabled: false } },
+      sources: { opencode: { disabled: true }, codex: { disabled: true }, pi: { disabled: true }, cursor: { disabled: true }, kimi: { root: emptyKimiRoot, disabled: false }, kiro: { disabled: true } },
     });
     assert.equal(noKimiKey.source, "claude-code");
     assert.equal(noKimiKey.sessions.length, 0);

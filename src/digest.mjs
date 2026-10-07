@@ -255,6 +255,7 @@ const AGENT_LAUNCHER_RE = new RegExp(
       `cursor-agent\\s+${LAUNCHER_FLAGS}(?:-p|--print)`,
       `pi\\s+${LAUNCHER_FLAGS}(?:-p|--print)`,
       `kimi\\s+${LAUNCHER_FLAGS}(?:-p|--prompt)`,
+      `kiro-cli\\s+${LAUNCHER_FLAGS}chat\\s+${LAUNCHER_FLAGS}--no-interactive`,
     ].join("|") +
     ")(?=\\s|$)",
 );
